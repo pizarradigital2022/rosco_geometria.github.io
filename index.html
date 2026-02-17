@@ -11,15 +11,16 @@ body{
   background-color:#f0f8ff;
 }
 
-/* ---------- PANTALLA INICIAL ---------- */
+/* ---------- PANTALLA BIENVENIDA ---------- */
 
 #welcome-screen{
-  margin-top:60px;
+  margin-top:40px;
 }
 
 #welcome-image{
-  width:250px;
-  margin-bottom:20px;
+  width:400px;   /* MÁS GRANDE */
+  max-width:90%;
+  margin-bottom:30px;
 }
 
 /* ---------- JUEGO ---------- */
@@ -48,6 +49,18 @@ body{
   font-weight:bold;
 }
 
+/* Imagen central del rosco */
+#center-image{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  object-fit:cover;
+}
+
 button{
   padding:10px 15px;
   margin:5px;
@@ -65,6 +78,16 @@ button{
   margin:10px;
 }
 
+/* CAJA DE RESPUESTA MÁS GRANDE */
+#answer{
+  width:400px;
+  max-width:90%;
+  padding:12px;
+  font-size:1.3em;
+  text-align:center;
+  border-radius:8px;
+}
+
 #final-message{
   margin-top:20px;
 }
@@ -75,7 +98,7 @@ button{
 
 <h1>Rosco Geometría</h1>
 
-<!-- ---------- PANTALLA BIENVENIDA ---------- -->
+<!-- ---------- BIENVENIDA ---------- -->
 
 <div id="welcome-screen">
   <img id="welcome-image" src="bienvenida.png" alt="Bienvenida">
@@ -89,14 +112,17 @@ button{
   </div>
 </div>
 
-<!-- ---------- CONTENEDOR DEL JUEGO ---------- -->
+<!-- ---------- JUEGO ---------- -->
 
 <div id="game-container">
 
   <div id="timer"></div>
   <div id="score"></div>
 
-  <div id="rosco"></div>
+  <div id="rosco">
+    <!-- Imagen central -->
+    <img id="center-image" src="IMG_2793.png" alt="Centro">
+  </div>
 
   <p id="hint"></p>
 
@@ -159,7 +185,6 @@ function showTimeOptions(){
 }
 
 function startGame(seconds){
-
   document.getElementById("welcome-screen").style.display="none";
   document.getElementById("game-container").style.display="block";
 
@@ -182,7 +207,10 @@ function updateScore(){
 
 function createRosco(){
   const rosco=document.getElementById("rosco");
-  rosco.innerHTML="";
+
+  // Mantener imagen central
+  rosco.innerHTML='<img id="center-image" src="IMG_2793.png" alt="Centro">';
+
   const radius=200,centerX=250,centerY=250;
 
   letters.forEach((letter,i)=>{
@@ -206,7 +234,6 @@ function updateTimer(){
   let min=Math.floor(timeLeft/60).toString().padStart(2,'0');
   let sec=(timeLeft%60).toString().padStart(2,'0');
   document.getElementById("timer").innerText=`Tiempo: ${min}:${sec}`;
-
   if(timeLeft<=0){
     clearInterval(timer);
     endGame();
@@ -253,21 +280,14 @@ function passWord(){
 }
 
 function endGame(){
-
   document.getElementById("answer-area").style.display="none";
-
   document.getElementById("final-message").innerHTML=
   `<h2>Juego terminado</h2>
    <p>Aciertos: ${correct}</p>
    <p>Errores: ${wrong}</p>
-   <button onclick="restartGame()">Intentar de nuevo</button>`;
-}
-
-function restartGame(){
-  location.reload();
+   <button onclick="location.reload()">Intentar de nuevo</button>`;
 }
 
 </script>
 </body>
 </html>
-
