@@ -199,18 +199,22 @@ function startGame(seconds){
   document.getElementById("welcome-screen").style.display="none";
   document.getElementById("game-container").style.display="block";
 
-  letters=Object.keys(words);
-  correct=0;
-  wrong=0;
-  current=0;
-  timeLeft=seconds;
+  letters = Object.keys(words);
+  correct = 0;
+  wrong = 0;
+  current = 0;
+  timeLeft = seconds;
 
   updateScore();
   createRosco();
   nextQuestion();
 
-  timer=setInterval(updateTimer,1000);
+  // Foco inicial en la caja de respuesta
+  document.getElementById("answer").focus();
+
+  timer = setInterval(updateTimer,1000);
 }
+
 
 function updateScore(){
   document.getElementById("score").innerText="Aciertos: "+correct;
@@ -257,34 +261,39 @@ function nextQuestion(){
 }
 
 function checkAnswer(){
-  let letter=letters[current];
-  let input=normalize(document.getElementById("answer").value.trim());
-  let correctAnswer=normalize(words[letter].answer);
-  const btn=document.getElementById(`btn-${letter}`);
+  if(letters.length === 0) return; // seguridad
+  let letter = letters[current];
+  let input = normalize(document.getElementById("answer").value.trim());
+  let correctAnswer = normalize(words[letter].answer);
+  const btn = document.getElementById(`btn-${letter}`);
 
-  if(input===correctAnswer){
-    btn.style.backgroundColor="green";
+  if(input === correctAnswer){
+    btn.style.backgroundColor = "green";
     correct++;
-  }else{
-    btn.style.backgroundColor="red";
+  } else {
+    btn.style.backgroundColor = "red";
     wrong++;
   }
 
   updateScore();
-  document.getElementById("answer").value="";
-  letters.splice(current,1);
+  document.getElementById("answer").value = "";
 
-  if(letters.length>0){
-    current%=letters.length;
+  // Eliminar la letra actual
+  letters.splice(current, 1);
+
+  // Ajustar current solo si quedan letras
+  if(letters.length > 0){
+    if(current >= letters.length) current = 0; // reiniciar al inicio si llegamos al final
     nextQuestion();
-  }else{
+  } else {
     clearInterval(timer);
     endGame();
     return;
   }
 
-  document.getElementById("answer").focus(); 
+  document.getElementById("answer").focus();
 }
+
 
 function passWord(){
   const btn=document.getElementById(`btn-${letters[current]}`);
