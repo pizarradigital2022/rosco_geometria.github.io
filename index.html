@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Rosco Geometría - Pasapalabra</title>
+<title>Rosco de Geometría - Pasapalabra</title>
 
 <style>
 body{
@@ -47,6 +47,12 @@ body{
   justify-content:center;
   position:absolute;
   font-weight:bold;
+}
+  
+#hint{
+  font-size: 1.8em;   /* Tamaño más grande */
+  font-weight: bold;  /* Opcional: más visible */
+  margin: 20px;
 }
 
 /* Imagen central del rosco */
@@ -277,6 +283,7 @@ function passWord(){
   const btn=document.getElementById(`btn-${letters[current]}`);
   btn.style.backgroundColor="yellow";
   current=(current+1)%letters.length;
+  document.getElementById("answer").value="";
   nextQuestion();
 }
 
