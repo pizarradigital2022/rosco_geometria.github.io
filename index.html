@@ -3,129 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <title>Rosco Geometría - Pasapalabra</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+
 <style>
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background-color: #f0f8ff;
+body{
+  font-family:Arial, sans-serif;
+  text-align:center;
+  background-color:#f0f8ff;
 }
 
-#rosco {
-  position: relative;
-  width: 500px;
-  height: 500px;
-  margin: 20px auto;
+/* ---------- PANTALLA INICIAL ---------- */
+
+#welcome-screen{
+  margin-top:60px;
 }
 
-.letter {
-  width: 50px;
-  height: 50px;
-  background-color: blue;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  font-weight: bold;
+#welcome-image{
+  width:250px;
+  margin-bottom:20px;
 }
 
-#center-image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
+/* ---------- JUEGO ---------- */
+
+#game-container{
+  display:none;
 }
 
-button {
-  padding: 10px 15px;
-  margin: 5px;
-  font-size: 1em;
+#rosco{
+  position:relative;
+  width:500px;
+  height:500px;
+  margin:20px auto;
 }
 
-#timer {
-  font-size: 1.5em;
-  font-weight: bold;
+.letter{
+  width:50px;
+  height:50px;
+  background-color:blue;
+  color:white;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:absolute;
+  font-weight:bold;
 }
 
-#score {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin: 10px;
+button{
+  padding:10px 15px;
+  margin:5px;
+  font-size:1em;
 }
 
-#solution {
-  color: red;
-  font-weight: bold;
+#timer{
+  font-size:1.5em;
+  font-weight:bold;
 }
 
-#time-selection {
-  display: none;
+#score{
+  font-size:1.2em;
+  font-weight:bold;
+  margin:10px;
+}
+
+#final-message{
+  margin-top:20px;
 }
 </style>
 </head>
+
 <body>
 
-<h1>Rosco Geometría - Pasapalabra</h1>
+<h1>Rosco Geometría</h1>
 
-<div id="timer"></div>
-<div id="score"></div>
+<!-- ---------- PANTALLA BIENVENIDA ---------- -->
 
-<button id="play-button" onclick="showTimeOptions()">Jugar</button>
+<div id="welcome-screen">
+  <img id="welcome-image" src="bienvenida.png" alt="Bienvenida">
+  <br>
+  <button onclick="showTimeOptions()">Jugar</button>
 
-<div id="time-selection">
-  <p>Elige duración:</p>
-  <button onclick="startGame(300)">5 minutos</button>
-  <button onclick="startGame(600)">10 minutos</button>
-</div>
-
-<div id="rosco"></div>
-
-<div id="game-area" style="display:none;">
-  <p id="hint"></p>
-  <input type="text" id="answer" placeholder="Tu respuesta...">
-  <div>
-    <button onclick="checkAnswer()">Comprobar</button>
-    <button onclick="passWord()">Pasapalabra</button>
+  <div id="time-selection" style="display:none;">
+    <p>Elige duración:</p>
+    <button onclick="startGame(300)">5 minutos</button>
+    <button onclick="startGame(600)">10 minutos</button>
   </div>
 </div>
 
-<div id="solution"></div>
-<div id="final-message"></div>
+<!-- ---------- CONTENEDOR DEL JUEGO ---------- -->
+
+<div id="game-container">
+
+  <div id="timer"></div>
+  <div id="score"></div>
+
+  <div id="rosco"></div>
+
+  <p id="hint"></p>
+
+  <div id="answer-area">
+    <input type="text" id="answer" placeholder="Tu respuesta...">
+    <div>
+      <button onclick="checkAnswer()">Comprobar</button>
+      <button onclick="passWord()">Pasapalabra</button>
+    </div>
+  </div>
+
+  <div id="final-message"></div>
+
+</div>
 
 <script>
 
-const words = {
-  A:{answer:"ángulo",hint:"Figura formada por dos semirrectas con un mismo origen."},
-  B:{answer:"bisectriz",hint:"Recta que divide un ángulo en dos partes iguales."},
-  C:{answer:"circunferencia",hint:"Línea curva cerrada cuyos puntos están a igual distancia de un punto central."},
-  D:{answer:"diámetro",hint:"Segmento que une dos puntos de una circunferencia y pasa por el centro."},
-  E:{answer:"esfera",hint:"Cuerpo geométrico perfectamente redondo en 3D."},
-  F:{answer:"figura",hint:"Representación visual de un objeto geométrico."},
-  G:{answer:"geometría",hint:"Parte de las matemáticas que estudia las propiedades del espacio."},
-  H:{answer:"heptágono",hint:"Polígono de siete lados."},
-  I:{answer:"isósceles",hint:"Triángulo con dos lados iguales."},
-  J:{answer:"eje",hint:"Contiene la letra J: Línea de referencia."},
-  K:{answer:"kilómetro",hint:"Múltiplo de la unidad de longitud (1000 metros)."},
-  L:{answer:"paralelas",hint:"Contiene la L: Rectas que nunca se cortan."},
-  M:{answer:"mediana",hint:"Segmento que une vértice con punto medio."},
-  N:{answer:"pentágono",hint:"Contiene la N: Polígono de cinco lados."},
-  O:{answer:"octógono",hint:"Polígono de ocho lados."},
-  P:{answer:"paralelogramo",hint:"Cuadrilátero con lados opuestos paralelos."},
-  Q:{answer:"cuadrado",hint:"Figura con cuatro lados iguales."},
-  R:{answer:"radio",hint:"Segmento del centro a la circunferencia."},
-  S:{answer:"segmento",hint:"Parte de una recta entre dos puntos."},
-  T:{answer:"triángulo",hint:"Figura de tres lados."},
-  U:{answer:"unidad",hint:"Magnitud de referencia."},
-  V:{answer:"vértice",hint:"Punto donde se encuentran lados."},
-  W:{answer:"web",hint:"Lugar en línea."},
-  X:{answer:"x",hint:"Incógnita matemática."},
-  Y:{answer:"y",hint:"Eje vertical."},
-  Z:{answer:"trapezoide",hint:"Contiene la Z: Cuadrilátero sin lados paralelos."}
+const words={
+A:{answer:"ángulo",hint:"Figura formada por dos semirrectas con un mismo origen."},
+B:{answer:"bisectriz",hint:"Recta que divide un ángulo en dos partes iguales."},
+C:{answer:"circunferencia",hint:"Línea curva cerrada cuyos puntos están a igual distancia de un punto central."},
+D:{answer:"diámetro",hint:"Segmento que une dos puntos y pasa por el centro."},
+E:{answer:"esfera",hint:"Cuerpo geométrico perfectamente redondo en 3D."},
+F:{answer:"figura",hint:"Representación visual geométrica."},
+G:{answer:"geometría",hint:"Parte de las matemáticas que estudia el espacio."},
+H:{answer:"heptágono",hint:"Polígono de siete lados."},
+I:{answer:"isósceles",hint:"Triángulo con dos lados iguales."},
+J:{answer:"eje",hint:"Contiene la J: Línea de referencia."},
+K:{answer:"kilómetro",hint:"Múltiplo de 1000 metros."},
+L:{answer:"paralelas",hint:"Contiene la L: Rectas que no se cortan."},
+M:{answer:"mediana",hint:"Segmento que une vértice con punto medio."},
+N:{answer:"pentágono",hint:"Contiene la N: Polígono de cinco lados."},
+O:{answer:"octógono",hint:"Polígono de ocho lados."},
+P:{answer:"paralelogramo",hint:"Cuadrilátero con lados paralelos."},
+Q:{answer:"cuadrado",hint:"Cuatro lados iguales."},
+R:{answer:"radio",hint:"Segmento del centro a la circunferencia."},
+S:{answer:"segmento",hint:"Parte de recta entre dos puntos."},
+T:{answer:"triángulo",hint:"Figura de tres lados."},
+U:{answer:"unidad",hint:"Magnitud de referencia."},
+V:{answer:"vértice",hint:"Punto donde se unen lados."},
+W:{answer:"web",hint:"Lugar en línea."},
+X:{answer:"x",hint:"Incógnita matemática."},
+Y:{answer:"y",hint:"Eje vertical."},
+Z:{answer:"trapezoide",hint:"Contiene la Z: Cuadrilátero sin lados paralelos."}
 };
 
 let letters=[];
@@ -140,22 +155,24 @@ function normalize(text){
 }
 
 function showTimeOptions(){
-  document.getElementById("play-button").style.display="none";
   document.getElementById("time-selection").style.display="block";
 }
 
 function startGame(seconds){
-  document.getElementById("time-selection").style.display="none";
-  document.getElementById("game-area").style.display="block";
-  document.getElementById("final-message").innerHTML="";
+
+  document.getElementById("welcome-screen").style.display="none";
+  document.getElementById("game-container").style.display="block";
+
   letters=Object.keys(words);
   correct=0;
   wrong=0;
-  timeLeft=seconds;
   current=0;
+  timeLeft=seconds;
+
   updateScore();
   createRosco();
   nextQuestion();
+
   timer=setInterval(updateTimer,1000);
 }
 
@@ -167,16 +184,19 @@ function createRosco(){
   const rosco=document.getElementById("rosco");
   rosco.innerHTML="";
   const radius=200,centerX=250,centerY=250;
+
   letters.forEach((letter,i)=>{
     const angle=(2*Math.PI/letters.length)*i;
     const x=centerX+radius*Math.sin(angle);
     const y=centerY-radius*Math.cos(angle);
+
     const btn=document.createElement("div");
     btn.className="letter";
     btn.innerText=letter;
     btn.style.left=`${x-25}px`;
     btn.style.top=`${y-25}px`;
     btn.id=`btn-${letter}`;
+
     rosco.appendChild(btn);
   });
 }
@@ -186,6 +206,7 @@ function updateTimer(){
   let min=Math.floor(timeLeft/60).toString().padStart(2,'0');
   let sec=(timeLeft%60).toString().padStart(2,'0');
   document.getElementById("timer").innerText=`Tiempo: ${min}:${sec}`;
+
   if(timeLeft<=0){
     clearInterval(timer);
     endGame();
@@ -232,15 +253,21 @@ function passWord(){
 }
 
 function endGame(){
-  document.getElementById("game-area").style.display="none";
-  document.getElementById("hint").innerText="";
+
+  document.getElementById("answer-area").style.display="none";
+
   document.getElementById("final-message").innerHTML=
-    `<h2>Juego terminado</h2>
-     <p>Aciertos: ${correct}</p>
-     <p>Errores: ${wrong}</p>
-     <button onclick="location.reload()">Intentar de nuevo</button>`;
+  `<h2>Juego terminado</h2>
+   <p>Aciertos: ${correct}</p>
+   <p>Errores: ${wrong}</p>
+   <button onclick="restartGame()">Intentar de nuevo</button>`;
+}
+
+function restartGame(){
+  location.reload();
 }
 
 </script>
 </body>
 </html>
+
