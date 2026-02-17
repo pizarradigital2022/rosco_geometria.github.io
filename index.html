@@ -276,7 +276,10 @@ function checkAnswer(){
   }else{
     clearInterval(timer);
     endGame();
+    return;
   }
+
+  document.getElementById("answer").focus(); 
 }
 
 function passWord(){
@@ -285,6 +288,8 @@ function passWord(){
   current=(current+1)%letters.length;
   document.getElementById("answer").value="";
   nextQuestion();
+
+  document.getElementById("answer").focus(); 
 }
 
 function endGame(){
@@ -296,6 +301,17 @@ function endGame(){
    <button onclick="location.reload()">Intentar de nuevo</button>`;
 }
 
+document.getElementById("answer").addEventListener("keydown", function(event){
+  if(event.key === "Enter"){
+    event.preventDefault();
+    checkAnswer();
+  }
+});document.getElementById("answer").addEventListener("keydown", function(event){
+  if(event.key === "Enter"){
+    event.preventDefault();
+    checkAnswer();
+  }
+});
 </script>
 </body>
 </html>
