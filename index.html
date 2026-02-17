@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Rosco de Geometría - Pasapalabra</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/x-icon" href="./resources/favicon.ico">
 
 <style>
 body{
@@ -108,7 +108,7 @@ button{
 <!-- ---------- BIENVENIDA ---------- -->
 
 <div id="welcome-screen">
-  <img id="welcome-image" src="bienvenida.png" alt="Bienvenida">
+  <img id="welcome-image" src="./resources/bienvenida.png" alt="Bienvenida">
   <br>
   <button onclick="showTimeOptions()">Jugar</button>
   
@@ -118,7 +118,7 @@ button{
     <button onclick="startGame(600)">10 minutos</button>
   </div>
 
-  <p>Autor: Joaquín Candañedo.<br><a href="https://creativecommons.org/licenses/by-sa/4.0/"><img src="./CC_BY_SA.png" alt="Creative Commons Reconocimiento - Compartir Igual"></a></p>
+  <p>Autor: Joaquín Candañedo.<br><a href="https://creativecommons.org/licenses/by-sa/4.0/"><img src="./resources/CC_BY_SA.png" alt="Creative Commons Reconocimiento - Compartir Igual"></a></p>
 
 
 </div>
@@ -132,7 +132,7 @@ button{
 
   <div id="rosco">
     <!-- Imagen central -->
-    <img id="center-image" src="IMG_2793.png" alt="Centro">
+    <img id="center-image" src="./resources/IMG_2793.png" alt="Centro">
   </div>
 
   <p id="hint"></p>
@@ -225,7 +225,7 @@ function createRosco(){
   const rosco=document.getElementById("rosco");
 
   // Mantener imagen central
-  rosco.innerHTML='<img id="center-image" src="IMG_2793.png" alt="Centro">';
+  rosco.innerHTML='<img id="center-image" src="./resources/IMG_2793.png" alt="Centro">';
 
   const radius=200,centerX=250,centerY=250;
 
